@@ -3,18 +3,21 @@ import java.io.*;
 import java.util.*;
 public class GroupChat
 {
-    private static final String TERMINATE = "Exit";
+	
+	private static final String TERMINATE = "Exit";
     static String name;
     static volatile boolean finished = false;
     public static void main(String[] args)
     {
-        if (args.length != 2)
+        
+    	if (args.length != 2)
             System.out.println("Two arguments required: <multicast-host> <port-number>");
         else
         {
             try
             {
-                InetAddress group = InetAddress.getByName(args[0]);
+            	
+            	InetAddress group = InetAddress.getByName(args[0]);
                 int port = Integer.parseInt(args[1]);
                 Scanner sc = new Scanner(System.in);
                 System.out.print("Enter your name: ");
@@ -61,14 +64,17 @@ public class GroupChat
             {
                 System.out.println("Error reading/writing from/to socket");
                 ie.printStackTrace();
+                
             }
+            
         }
     }
 }
 
-class ReadThread implements Runnable
+class ReadThread extends gui implements Runnable 
 {
-    private MulticastSocket socket;
+	
+	private MulticastSocket socket;
     private InetAddress group;
     private int port;
     private static final int MAX_LEN = 1000;
@@ -82,7 +88,8 @@ class ReadThread implements Runnable
     @Override
     public void run()
     {
-        while(!GroupChat.finished)
+    	gui gui1 = new gui();
+    	while(!GroupChat.finished)
         {
                 byte[] buffer = new byte[ReadThread.MAX_LEN];
                 DatagramPacket datagram = new
@@ -94,7 +101,8 @@ class ReadThread implements Runnable
                 message = new
                 String(buffer,0,datagram.getLength(),"UTF-8");
                 if(!message.startsWith(GroupChat.name))
-                    System.out.println(message);
+                    //System.out.println(message);
+                	gui1.textArea.append(message);
             }
             catch(IOException e)
             {
